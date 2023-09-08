@@ -11,7 +11,22 @@ class MethodChannelPdfPasswordIos extends PdfPasswordIosPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
+  }
+
+  @override
+  Future<bool?> verifyPassword(String path) async {
+    try {
+      final isLocked =
+          await methodChannel.invokeMethod<bool>('pdf_password_ios', [path]);
+      if (isLocked != null) {
+        return isLocked;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
   }
 }

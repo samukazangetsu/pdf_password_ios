@@ -26,4 +26,6 @@ abstract class PdfPasswordIosPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<bool?> verifyPassword(String path);
 }
