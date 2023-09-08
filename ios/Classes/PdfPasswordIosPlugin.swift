@@ -12,23 +12,15 @@ public class PdfPasswordIosPlugin: NSObject, FlutterPlugin {
     }
 
     public func verifyPassword(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      let args = call.arguments as? [String]
-        if(args != nil){
-            let path = args![0]
-            let pdf = PDFDocument(url: URL(fileURLWithPath: path))
-
-            if(pdf?.documentURL != nil){
-                if ((pdf?.documentURL?.startAccessingSecurityScopedResource()) != nil){
-                    result(pdf!.isLocked)
-                } else {
-                    result(FlutterError(code: "PATH", message: "Não foi encontrado um arquivo", details: nil))
-                }
-                  
-              }
-            result(FlutterError(code: "PATH", message: "Não foi encontrado um arquivo", details: nil))
-        }
-      
-        result(FlutterError(code: "PATH", message: "Não informado um caminho válido", details: nil))
+        var isEncrypted = false
+           guard let flutterData = call.arguments as? FlutterStandardTypedData else {
+               result(isEncrypted)
+               return
+           }
+           if let pdfDocument = PDFDocument(data: flutterData.data) {
+               isEncrypted = pdfDocument.isEncrypted
+           }
+           result(isEncrypted);
        
   }
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

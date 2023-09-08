@@ -45,5 +45,6 @@ post_install do |installer|
         '$(inherited)',
         'PERMISSION_MEDIA_LIBRARY=1',
       ]
+    end
   end
 end

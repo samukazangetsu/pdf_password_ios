@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
                 final bytes = file.readAsBytesSync();
                 final temSenha =
                     await _pdfPasswordIosPlugin.isPasswordProtected(bytes);
-                setState(() async {
+                setState(() {
                   statusPdf = temSenha.toString();
                 });
               }
