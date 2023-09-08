@@ -11,17 +11,24 @@ public class PdfPasswordIosPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
-    public func verifyPassword(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> Any? {
-      
-      guard let args = call.arguments as? [String: Any] else {
-          return(FlutterError(code: "PATH", message: "Não é um caminho válido", details: nil))
-      }
-      let path = args["path"] as! String
-        let pdf = PDFDocument(url: URL(path))
-        if(pdf != nil){
-            return pdf?.isLocked
+    public func verifyPassword(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+      let args = call.arguments as? [String]
+        if(args != nil){
+            let path = args![0]
+            let pdf = PDFDocument(url: URL(fileURLWithPath: path))
+
+            if(pdf?.documentURL != nil){
+                if ((pdf?.documentURL?.startAccessingSecurityScopedResource()) != nil){
+                    result(pdf!.isLocked)
+                } else {
+                    result(FlutterError(code: "PATH", message: "Não foi encontrado um arquivo", details: nil))
+                }
+                  
+              }
+            result(FlutterError(code: "PATH", message: "Não foi encontrado um arquivo", details: nil))
         }
-        return(FlutterError(code: "PATH", message: "Não foi encontrado um arquivo", details: nil))
+      
+        result(FlutterError(code: "PATH", message: "Não informado um caminho válido", details: nil))
        
   }
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
