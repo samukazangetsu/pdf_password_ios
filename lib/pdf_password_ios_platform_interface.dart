@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'pdf_password_ios_method_channel.dart';
@@ -23,9 +25,5 @@ abstract class PdfPasswordIosPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
-  Future<bool?> verifyPassword(String path);
+  Future<bool> isPasswordProtected(Uint8List bytes);
 }

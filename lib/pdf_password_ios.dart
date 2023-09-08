@@ -1,11 +1,9 @@
+import 'dart:typed_data';
+
 import 'pdf_password_ios_platform_interface.dart';
 
 class PdfPasswordIos {
-  Future<String?> getPlatformVersion() {
-    return PdfPasswordIosPlatform.instance.getPlatformVersion();
-  }
-
-  Future<bool?> verifyPassowrd(String path) {
-    return PdfPasswordIosPlatform.instance.verifyPassword(path);
+  Future<bool?> isPasswordProtected(Uint8List bytes) {
+    return PdfPasswordIosPlatform.instance.isPasswordProtected(bytes);
   }
 }

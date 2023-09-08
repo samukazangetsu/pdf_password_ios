@@ -10,23 +10,18 @@ class MethodChannelPdfPasswordIos extends PdfPasswordIosPlatform {
   final methodChannel = const MethodChannel('pdf_password_ios');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
-  @override
-  Future<bool?> verifyPassword(String path) async {
+  Future<bool> isPasswordProtected(Uint8List bytes) async {
     try {
-      final isLocked =
-          await methodChannel.invokeMethod<bool>('pdf_password_ios', [path]);
-      if (isLocked != null) {
-        return isLocked;
+      final bool result =
+          await methodChannel.invokeMethod('pdf_password_ios', bytes);
+      return result;
+    } catch (error) {
+      if (kDebugMode) {
+        print(
+          'Erro ao tentar verificar se o PDF é protegido: ${error.toString()}',
+        );
       }
-    } catch (e) {
-      rethrow;
     }
-    return null;
+    return false;
   }
 }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_password_ios/pdf_password_ios.dart';
+import 'package:file_picker/file_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,11 +31,16 @@ class _MyAppState extends State<MyApp> {
           child: ElevatedButton(
             child: Text("Abrir PDF: $statusPdf"),
             onPressed: () async {
-              final temSenha =
-                  await _pdfPasswordIosPlugin.verifyPassowrd("/Pdf");
-              setState(() async {
-                statusPdf = temSenha.toString();
-              });
+              final paths = await FilePicker.platform.pickFiles();
+              if (paths?.files.single.path != null) {
+                final file = File(paths!.files.single.path!);
+                final bytes = file.readAsBytesSync();
+                final temSenha =
+                    await _pdfPasswordIosPlugin.isPasswordProtected(bytes);
+                setState(() async {
+                  statusPdf = temSenha.toString();
+                });
+              }
             },
           ),
         ),
